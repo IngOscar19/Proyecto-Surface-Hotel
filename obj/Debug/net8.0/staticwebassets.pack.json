@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/0db77fa9-6054-41ee-8393-cadae7e66055.jpg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/0db77fa9-6054-41ee-8393-cadae7e66055.jpg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/338ff4f3-96b6-42f4-9d50-648012fe33ed.jpeg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/338ff4f3-96b6-42f4-9d50-648012fe33ed.jpeg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/3953adce-ada6-479a-bf55-6b59388b2c2f.jpg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/3953adce-ada6-479a-bf55-6b59388b2c2f.jpg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/47b2499e-ec2b-4199-8f97-958e75e2a20b.jpg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/47b2499e-ec2b-4199-8f97-958e75e2a20b.jpg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/7086f963-700d-4b09-8e11-0e7cca51f35b.jpg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/7086f963-700d-4b09-8e11-0e7cca51f35b.jpg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/bc49eee2-b570-4641-ae19-e4e6bdd23863.jpeg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/bc49eee2-b570-4641-ae19-e4e6bdd23863.jpeg"
+    },
+    {
+      "Id": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/e7b29f84-a5f2-4f23-a9ea-93dd5ee90897.jpeg",
+      "PackagePath": "staticwebassets/uploads/habitaciones/e7b29f84-a5f2-4f23-a9ea-93dd5ee90897.jpeg"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ProjectHotel.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.ProjectHotel.props",
+      "PackagePath": "build\\ProjectHotel.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ProjectHotel.props",
+      "PackagePath": "buildMultiTargeting\\ProjectHotel.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ProjectHotel.props",
+      "PackagePath": "buildTransitive\\ProjectHotel.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
