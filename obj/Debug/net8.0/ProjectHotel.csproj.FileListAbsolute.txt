@@ -139,3 +139,4 @@
 /Users/oscar-romero/Downloads/Propietarios/ProjectHotel/obj/Debug/net8.0/ProjectHotel.pdb
 /Users/oscar-romero/Downloads/Propietarios/ProjectHotel/obj/Debug/net8.0/ProjectHotel.genruntimeconfig.cache
 /Users/oscar-romero/Downloads/Propietarios/ProjectHotel/obj/Debug/net8.0/ref/ProjectHotel.dll
+/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/obj/Debug/net8.0/ProjectHotel.sourcelink.json

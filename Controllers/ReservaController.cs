@@ -20,12 +20,16 @@ namespace Hotel.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        // TEMPORAL: Quitado [Authorize] para pruebas - AGREGAR DE NUEVO EN PRODUCCIÓN
         public async Task<IActionResult> CrearReserva([FromBody] ReservaCreateDto dto)
         {
             try
             {
-                // Validar que el claim existe
+                // TEMPORAL: Usuario hardcodeado para pruebas
+                // En producción, descomentar el código de autenticación abajo
+                int usuarioId = 1; // Usuario por defecto para pruebas
+
+                /* DESCOMENTAR ESTO EN PRODUCCIÓN Y AGREGAR [Authorize] arriba:
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) 
                     ?? User.FindFirst("nameid") 
                     ?? User.FindFirst("sub");
@@ -41,10 +45,17 @@ namespace Hotel.Controllers
                     _logger.LogError($"El ID de usuario no es un número válido: {userIdClaim.Value}");
                     return BadRequest(new { mensaje = "ID de usuario inválido en el token" });
                 }
+                */
 
                 _logger.LogInformation($"Creando reserva para usuario {usuarioId}");
+                _logger.LogInformation($"HabitacionId: {dto.HabitacionId}");
+                _logger.LogInformation($"HuespedId: {dto.HuespedId}");
+                _logger.LogInformation($"FechaEntrada: {dto.FechaEntrada}");
+                _logger.LogInformation($"FechaSalida: {dto.FechaSalida}");
                 
                 var reserva = await _reservaService.CrearReservaAsync(dto, usuarioId);
+                
+                _logger.LogInformation($"✅ Reserva creada con ID: {reserva.Id}");
                 
                 return Ok(reserva);
             }
@@ -76,7 +87,7 @@ namespace Hotel.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        // TEMPORAL: Quitado [Authorize] para pruebas
         public async Task<IActionResult> ObtenerReservas()
         {
             try

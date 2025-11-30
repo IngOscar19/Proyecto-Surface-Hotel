@@ -76,6 +76,7 @@ builder.Services.AddScoped<ITemporadaPrecioService, TemporadaPrecioService>();
 builder.Services.AddScoped<ITemporadaHabitacionPrecioService, TemporadaHabitacionPrecioService>();
 builder.Services.AddScoped<IHuespedService, HuespedService>();
 builder.Services.AddScoped<IReservaService, ReservaService>();
+builder.Services.AddScoped<ITipoHabitacionService, TipoHabitacionService>();
 
 var app = builder.Build();
 
