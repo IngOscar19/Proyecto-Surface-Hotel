@@ -20,32 +20,13 @@ namespace Hotel.Controllers
         }
 
         [HttpPost]
-        // TEMPORAL: Quitado [Authorize] para pruebas - AGREGAR DE NUEVO EN PRODUCCIÓN
+        // TEMPORAL: Quitado [Authorize] para pruebas
         public async Task<IActionResult> CrearReserva([FromBody] ReservaCreateDto dto)
         {
             try
             {
                 // TEMPORAL: Usuario hardcodeado para pruebas
-                // En producción, descomentar el código de autenticación abajo
-                int usuarioId = 1; // Usuario por defecto para pruebas
-
-                /* DESCOMENTAR ESTO EN PRODUCCIÓN Y AGREGAR [Authorize] arriba:
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) 
-                    ?? User.FindFirst("nameid") 
-                    ?? User.FindFirst("sub");
-
-                if (userIdClaim == null)
-                {
-                    _logger.LogError("No se encontró el claim de usuario en el token");
-                    return Unauthorized(new { mensaje = "Token inválido o usuario no identificado" });
-                }
-
-                if (!int.TryParse(userIdClaim.Value, out int usuarioId))
-                {
-                    _logger.LogError($"El ID de usuario no es un número válido: {userIdClaim.Value}");
-                    return BadRequest(new { mensaje = "ID de usuario inválido en el token" });
-                }
-                */
+                int usuarioId = 1;
 
                 _logger.LogInformation($"Creando reserva para usuario {usuarioId}");
                 _logger.LogInformation($"HabitacionId: {dto.HabitacionId}");
@@ -87,7 +68,6 @@ namespace Hotel.Controllers
         }
 
         [HttpGet]
-        // TEMPORAL: Quitado [Authorize] para pruebas
         public async Task<IActionResult> ObtenerReservas()
         {
             try
@@ -98,6 +78,36 @@ namespace Hotel.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener reservas: {Message}", ex.Message);
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        // ✅ NUEVO: Confirmar una reserva pendiente
+        [HttpPatch("{id}/confirmar")]
+        [Authorize(Roles = "admin,empleado")]
+        public async Task<IActionResult> ConfirmarReserva(int id)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) 
+                    ?? User.FindFirst("nameid") 
+                    ?? User.FindFirst("sub");
+
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int usuarioId))
+                {
+                    return Unauthorized(new { mensaje = "Token inválido" });
+                }
+
+                var resultado = await _reservaService.ConfirmarReservaAsync(id, usuarioId);
+
+                if (!resultado)
+                    return NotFound(new { mensaje = "Reserva no encontrada" });
+
+                return Ok(new { mensaje = "Reserva confirmada exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al confirmar reserva {Id}: {Message}", id, ex.Message);
                 return BadRequest(new { mensaje = ex.Message });
             }
         }

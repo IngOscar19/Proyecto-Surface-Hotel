@@ -29,7 +29,10 @@ namespace Hotel.Validators
                 .MaximumLength(100).WithMessage("La contraseña no puede exceder 100 caracteres")
                 .Matches(@"[A-Z]").WithMessage("La contraseña debe contener al menos una mayúscula")
                 .Matches(@"[a-z]").WithMessage("La contraseña debe contener al menos una minúscula")
-                .Matches(@"[0-9]").WithMessage("La contraseña debe contener al menos un número");
+                .Matches(@"[0-9]").WithMessage("La contraseña debe contener al menos un número")
+                .Matches(@"^[A-Za-z0-9!@#$%^&*()_\-+=\[\]{}.,:;?<>/\\|]+$")
+                    .WithMessage("La contraseña contiene caracteres no permitidos");
+
 
             RuleFor(x => x.Rol)
                 .NotEmpty().WithMessage("El rol es obligatorio")

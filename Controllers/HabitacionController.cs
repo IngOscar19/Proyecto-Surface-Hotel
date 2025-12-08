@@ -28,7 +28,7 @@ namespace Hotel.Controllers
             _fotoValidator = fotoValidator;
         }
 
-        // POST: api/habitaciones - Crear habitación con archivos (FormData)
+       
         [Authorize(Roles = "admin,empleado")]
         [HttpPost]
         public async Task<IActionResult> Crear([FromForm] CrearHabitacionFormRequest formRequest)
@@ -111,7 +111,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // GET: api/habitaciones - Obtener todas las habitaciones con detalles
+       
         [HttpGet]
         public async Task<IActionResult> ObtenerTodas()
         {
@@ -126,7 +126,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // GET: api/habitaciones/{id} - Obtener habitación por ID con detalle
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerPorId(int id)
         {
@@ -144,7 +144,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // GET: api/habitaciones/numero/{numero} - Obtener habitación por número
+        
         [HttpGet("numero/{numero}")]
         public async Task<IActionResult> ObtenerPorNumero(string numero)
         {
@@ -162,7 +162,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // GET: api/habitaciones/disponibles - Obtener habitaciones disponibles
+       
         [HttpGet("disponibles")]
         public async Task<IActionResult> ObtenerDisponibles()
         {
@@ -177,7 +177,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // POST: api/habitaciones/filtrar - Filtrar habitaciones
+       
         [HttpPost("filtrar")]
         public async Task<IActionResult> Filtrar([FromBody] FiltroHabitacionesRequest filtro)
         {
@@ -192,7 +192,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // PUT: api/habitaciones/{id} - Actualizar habitación con archivos (FormData)
+        
         [Authorize(Roles = "admin,empleado")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Actualizar(int id, [FromForm] ActualizarHabitacionFormRequest formRequest)
@@ -364,7 +364,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // DELETE: api/habitaciones/fotos/{fotoId} - Eliminar foto (solo admin/empleado)
+      
         [Authorize(Roles = "admin,empleado")]
         [HttpDelete("fotos/{fotoId}")]
         public async Task<IActionResult> EliminarFoto(int fotoId)
@@ -383,7 +383,7 @@ namespace Hotel.Controllers
             }
         }
 
-        // POST: api/habitaciones/{habitacionId}/servicios/{servicioId} - Agregar servicio (solo admin/empleado)
+        
         [Authorize(Roles = "admin,empleado")]
         [HttpPost("{habitacionId}/servicios/{servicioId}")]
         public async Task<IActionResult> AgregarServicio(int habitacionId, int servicioId)

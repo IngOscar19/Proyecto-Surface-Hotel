@@ -146,6 +146,7 @@ namespace Hotel.Services
             }
         }
 
+        // ✅ MÉTODO CORREGIDO: Ahora respeta la opción ReemplazarFotos
         public async Task<Habitacion?> ActualizarHabitacionAsync(
             int id, 
             ActualizarHabitacionRequest request, 
@@ -154,6 +155,7 @@ namespace Hotel.Services
             Console.WriteLine($"=== SERVICE: ActualizarHabitacionAsync ===");
             Console.WriteLine($"ID: {id}");
             Console.WriteLine($"NuevasFotos recibidas: {nuevasFotos?.Count ?? 0}");
+            Console.WriteLine($"ReemplazarFotos: {request.ReemplazarFotos}");
 
             var habitacion = await _context.Habitaciones
                 .Include(h => h.HabitacionServicios)
@@ -230,65 +232,72 @@ namespace Hotel.Services
                 }
             }
 
-            // Manejar nuevas fotos
+            // ✅ CORRECCIÓN: Manejar nuevas fotos según la opción ReemplazarFotos
             if (nuevasFotos != null && nuevasFotos.Any())
             {
-                Console.WriteLine($"Procesando {nuevasFotos.Count} nuevas fotos");
+                Console.WriteLine($"📸 Procesando {nuevasFotos.Count} nuevas fotos");
                 
-                // Si se debe reemplazar todas las fotos
+                // ✅ Solo eliminar fotos existentes si ReemplazarFotos == true
                 if (request.ReemplazarFotos == true)
                 {
-                    Console.WriteLine("ReemplazarFotos = true, eliminando fotos existentes");
-                    // Eliminar fotos existentes (archivos y registros)
+                    Console.WriteLine("🔄 ReemplazarFotos = TRUE → Eliminando fotos existentes");
+                    
+                    // Eliminar archivos físicos y registros de la BD
                     foreach (var foto in habitacion.Fotos.ToList())
                     {
+                        Console.WriteLine($"   Eliminando: {foto.Url}");
                         EliminarArchivo(foto.Url);
                         _context.HabitacionFotos.Remove(foto);
                     }
+                    
                     await _context.SaveChangesAsync();
                     
-                    // Recargar fotos
+                    // Recargar la colección de fotos
                     await _context.Entry(habitacion).Collection(h => h.Fotos).LoadAsync();
-                    Console.WriteLine($"Fotos después de eliminar: {habitacion.Fotos.Count}");
+                    Console.WriteLine($"   Fotos después de eliminar: {habitacion.Fotos.Count}");
+                }
+                else
+                {
+                    Console.WriteLine("➕ ReemplazarFotos = FALSE → Manteniendo fotos existentes y agregando nuevas");
                 }
 
-                // Agregar nuevas fotos
+                // ✅ Agregar nuevas fotos
+                // Si no hay fotos después de eliminar (o nunca hubo), la primera nueva será principal
                 bool esPrimeraFoto = !habitacion.Fotos.Any();
-                Console.WriteLine($"esPrimeraFoto: {esPrimeraFoto}");
+                Console.WriteLine($"   Primera foto será principal: {esPrimeraFoto}");
                 
                 foreach (var archivoFoto in nuevasFotos)
                 {
-                    Console.WriteLine($"Guardando archivo: {archivoFoto.FileName}");
+                    Console.WriteLine($"   Guardando archivo: {archivoFoto.FileName}");
                     var urlFoto = await GuardarArchivoAsync(archivoFoto);
-                    Console.WriteLine($"URL generada: {urlFoto}");
+                    Console.WriteLine($"   URL generada: {urlFoto}");
 
                     var foto = new HabitacionFoto
                     {
                         HabitacionId = habitacion.Id,
                         Url = urlFoto,
-                        EsPrincipal = esPrimeraFoto,
+                        EsPrincipal = esPrimeraFoto, // Solo la primera será principal
                         CreadoEn = DateTime.UtcNow
                     };
 
                     _context.HabitacionFotos.Add(foto);
-                    esPrimeraFoto = false;
+                    esPrimeraFoto = false; // Las siguientes NO serán principales
                 }
                 
                 await _context.SaveChangesAsync();
-                Console.WriteLine("Fotos guardadas en la base de datos");
+                Console.WriteLine("✅ Fotos guardadas en la base de datos");
                 
                 // Recargar fotos después de guardar
                 await _context.Entry(habitacion).Collection(h => h.Fotos).LoadAsync();
-                Console.WriteLine($"Total de fotos después de guardar: {habitacion.Fotos.Count}");
+                Console.WriteLine($"✅ Total de fotos después de actualizar: {habitacion.Fotos.Count}");
             }
             else
             {
-                Console.WriteLine("No se recibieron nuevas fotos");
+                Console.WriteLine("ℹ️ No se recibieron nuevas fotos, manteniendo las existentes");
             }
 
             await _context.SaveChangesAsync();
             return habitacion;
-            
         }
 
         public async Task<FotoResponse> AgregarFotoAsync(
@@ -354,9 +363,6 @@ namespace Hotel.Services
             return true;
         }
 
-        // ... resto de los métodos (ObtenerDetalleAsync, ObtenerTodasConDetalleAsync, etc.)
-        // se mantienen igual que antes
-        
         public async Task<HabitacionDetalleResponse?> ObtenerDetalleAsync(int id)
         {
             var habitacion = await _context.Habitaciones

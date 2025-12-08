@@ -10,11 +10,16 @@ namespace Hotel.Services
     {
         private readonly HotelDbContext _context;
         private readonly ITemporadaHabitacionPrecioService _precioService;
+        private readonly ILogger<ReservaService> _logger;
 
-        public ReservaService(HotelDbContext context, ITemporadaHabitacionPrecioService precioService)
+        public ReservaService(
+            HotelDbContext context, 
+            ITemporadaHabitacionPrecioService precioService,
+            ILogger<ReservaService> logger)
         {
             _context = context;
             _precioService = precioService;
+            _logger = logger;
         }
 
         public async Task<ReservaResponseDto> CrearReservaAsync(ReservaCreateDto dto, int usuarioId)
@@ -60,7 +65,7 @@ namespace Hotel.Services
                 if (numeroNoches <= 0)
                     throw new Exception("La reserva debe ser de al menos una noche.");
 
-                // Calcular precio total (itera por cada noche para considerar múltiples temporadas)
+                // Calcular precio total
                 decimal precioTotal = 0;
                 decimal precioPrimeraNoche = 0;
 
@@ -78,15 +83,25 @@ namespace Hotel.Services
                     precioTotal += precioNoche;
                 }
 
-                // Crear reserva (NumeroNoches se calculará automáticamente en la BD)
+                
+                var ahora = DateTime.UtcNow.Date;
+                string estadoInicial = "pendiente";
+                
+                // Si la fecha de entrada es hoy o en el pasado, confirmar automáticamente
+                if (dto.FechaEntrada.Date <= ahora)
+                {
+                    estadoInicial = "confirmada";
+                }
+
+                // Crear reserva
                 var reserva = new Reserva
                 {
                     HabitacionId = dto.HabitacionId,
                     HuespedId = dto.HuespedId,
                     FechaEntrada = dto.FechaEntrada,
                     FechaSalida = dto.FechaSalida,
-                    NumeroHuespedes = dto.NumeroHuespedes, // Ahora ambos son int
-                    Estado = "pendiente",
+                    NumeroHuespedes = dto.NumeroHuespedes,
+                    Estado = estadoInicial,
                     PrecioPorNoche = precioPrimeraNoche,
                     PrecioTotal = precioTotal,
                     Observaciones = dto.Observaciones,
@@ -98,7 +113,16 @@ namespace Hotel.Services
                 _context.Reservas.Add(reserva);
                 await _context.SaveChangesAsync();
 
-                // Recargar para obtener NumeroNoches y otros valores calculados
+                
+                if (estadoInicial == "confirmada" && dto.FechaEntrada.Date <= ahora && dto.FechaSalida.Date > ahora)
+                {
+                    _logger.LogInformation($"📌 Cambiando habitación {habitacion.NumeroHabitacion} a OCUPADA (Reserva inmediata)");
+                    habitacion.Estado = "ocupada";
+                    habitacion.ActualizadoEn = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                }
+
+                // Recargar para obtener NumeroNoches calculado
                 await _context.Entry(reserva).ReloadAsync();
 
                 return await ObtenerReservaPorIdAsync(reserva.Id) 
@@ -114,6 +138,35 @@ namespace Hotel.Services
                 var innerMessage = ex.InnerException?.Message ?? ex.Message;
                 throw new Exception($"Error al crear reserva: {innerMessage}", ex);
             }
+        }
+
+        
+        public async Task<bool> ConfirmarReservaAsync(int reservaId, int usuarioId)
+        {
+            var reserva = await _context.Reservas
+                .Include(r => r.Habitacion)
+                .FirstOrDefaultAsync(r => r.Id == reservaId);
+
+            if (reserva == null)
+                return false;
+
+            if (reserva.Estado != "pendiente")
+                throw new Exception($"La reserva está en estado '{reserva.Estado}' y no puede ser confirmada.");
+
+            reserva.Estado = "confirmada";
+            reserva.ActualizadoEn = DateTime.UtcNow;
+
+            // Si la fecha de entrada es hoy o ya pasó, cambiar habitación a ocupada
+            var hoy = DateTime.UtcNow.Date;
+            if (reserva.FechaEntrada.Date <= hoy && reserva.FechaSalida.Date > hoy)
+            {
+                _logger.LogInformation($"Cambiando habitación {reserva.Habitacion.NumeroHabitacion} a OCUPADA");
+                reserva.Habitacion.Estado = "ocupada";
+                reserva.Habitacion.ActualizadoEn = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<ReservaResponseDto?> ObtenerReservaPorIdAsync(int id)
@@ -181,6 +234,7 @@ namespace Hotel.Services
         public async Task<bool> CancelarReservaAsync(int reservaId, int usuarioId)
         {
             var reserva = await _context.Reservas
+                .Include(r => r.Habitacion)
                 .FirstOrDefaultAsync(r => r.Id == reservaId);
 
             if (reserva == null)
@@ -193,6 +247,14 @@ namespace Hotel.Services
             reserva.CanceladoPor = usuarioId;
             reserva.FechaCancelacion = DateTime.UtcNow;
             reserva.ActualizadoEn = DateTime.UtcNow;
+
+            
+            if (reserva.Habitacion.Estado == "ocupada")
+            {
+                _logger.LogInformation($"🧹 Cambiando habitación {reserva.Habitacion.NumeroHabitacion} a LIMPIEZA (Reserva cancelada)");
+                reserva.Habitacion.Estado = "limpieza";
+                reserva.Habitacion.ActualizadoEn = DateTime.UtcNow;
+            }
 
             await _context.SaveChangesAsync();
 

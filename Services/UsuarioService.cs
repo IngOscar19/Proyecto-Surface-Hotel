@@ -42,7 +42,7 @@ namespace Hotel.Services
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(password, usuario.PasswordHash))
                 throw new Exception("Email o contraseña incorrectos");
 
-            // CORREGIDO: Usar "Jwt:Key" en lugar de "JwtKey"
+            
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
             var issuer = _configuration["Jwt:Issuer"];
             

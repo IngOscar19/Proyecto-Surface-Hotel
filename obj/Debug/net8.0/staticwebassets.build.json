@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "A1Me+3qE1Aum/vQ3SVMFWAjpTeEZvlEVpKKzU2qGCdY=",
+  "Hash": "28zwQpNmq938SkyjsHF3HthhX6ECbsNKiXGstLhZrEM=",
   "Source": "ProjectHotel",
   "BasePath": "_content/ProjectHotel",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/0db77fa9-6054-41ee-8393-cadae7e66055.jpg",
+      "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/1e70704b-d645-4119-b2c3-f91dad85d348.jpg",
       "SourceId": "ProjectHotel",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/",
       "BasePath": "_content/ProjectHotel",
-      "RelativePath": "uploads/habitaciones/0db77fa9-6054-41ee-8393-cadae7e66055.jpg",
+      "RelativePath": "uploads/habitaciones/1e70704b-d645-4119-b2c3-f91dad85d348.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,15 +33,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/uploads/habitaciones/0db77fa9-6054-41ee-8393-cadae7e66055.jpg"
+      "OriginalItemSpec": "wwwroot/uploads/habitaciones/1e70704b-d645-4119-b2c3-f91dad85d348.jpg"
     },
     {
-      "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/338ff4f3-96b6-42f4-9d50-648012fe33ed.jpeg",
+      "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/25fc3100-a136-4665-ac13-f1f9060a306f.jpg",
       "SourceId": "ProjectHotel",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/",
       "BasePath": "_content/ProjectHotel",
-      "RelativePath": "uploads/habitaciones/338ff4f3-96b6-42f4-9d50-648012fe33ed.jpeg",
+      "RelativePath": "uploads/habitaciones/25fc3100-a136-4665-ac13-f1f9060a306f.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -52,7 +52,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/uploads/habitaciones/338ff4f3-96b6-42f4-9d50-648012fe33ed.jpeg"
+      "OriginalItemSpec": "wwwroot/uploads/habitaciones/25fc3100-a136-4665-ac13-f1f9060a306f.jpg"
     },
     {
       "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/3953adce-ada6-479a-bf55-6b59388b2c2f.jpg",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/habitaciones/bc49eee2-b570-4641-ae19-e4e6bdd23863.jpeg"
+    },
+    {
+      "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/e5475a24-55ea-4859-81fb-a966fca01a15.jpg",
+      "SourceId": "ProjectHotel",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/",
+      "BasePath": "_content/ProjectHotel",
+      "RelativePath": "uploads/habitaciones/e5475a24-55ea-4859-81fb-a966fca01a15.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/habitaciones/e5475a24-55ea-4859-81fb-a966fca01a15.jpg"
     },
     {
       "Identity": "/Users/oscar-romero/Downloads/Propietarios/ProjectHotel/wwwroot/uploads/habitaciones/e7b29f84-a5f2-4f23-a9ea-93dd5ee90897.jpeg",
