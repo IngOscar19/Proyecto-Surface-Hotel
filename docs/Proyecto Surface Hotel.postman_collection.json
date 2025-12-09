@@ -1,0 +1,668 @@
+{
+	"info": {
+		"_postman_id": "5a52bfec-e128-4644-bcd6-36f54f3622fa",
+		"name": "Proyecto Surface Hotel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39771414"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Registrar Nuevo Usuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJqdGkiOiI5M2QzZWYzZS00MjNjLTQ2NWYtYjJiMy1mYjgzNGJiNDQzNzQiLCJleHAiOjE3NjM1MDg0NTgsImlzcyI6Ik1pQXBpIiwiYXVkIjoiTWlBcGkifQ.O2qwU4qgGueu7ahT9jLyStr0XYGXZF06QwXbSO4Fkqc",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Alonso\",\n    \"apellido\": \"Perez\",\n    \"email\": \"alonso12@gmail.com\",\n    \"Password\": \"Password123\",\n    \"rol\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}usuarios/registro",
+							"host": [
+								"{{base_url}}usuarios"
+							],
+							"path": [
+								"registro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extraer el token del cuerpo de la respuesta y guardarlo en una variable de colección",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set(\"token\", jsonData.token);",
+									"        pm.test(\"Token almacenado en variable de colección\", function () {",
+									"            pm.expect(pm.collectionVariables.get(\"token\")).to.eql(jsonData.token);",
+									"        });",
+									"    } else {",
+									"        pm.test(\"La respuesta no contiene la propiedad 'token'\", function () {",
+									"            pm.expect(jsonData.token).to.exist;",
+									"        });",
+									"    }",
+									"} else {",
+									"    pm.test(\"Respuesta no exitosa\", function () {",
+									"        pm.expect(pm.response.code).to.eql(200);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJqdGkiOiI5M2QzZWYzZS00MjNjLTQ2NWYtYjJiMy1mYjgzNGJiNDQzNzQiLCJleHAiOjE3NjM1MDg0NTgsImlzcyI6Ik1pQXBpIiwiYXVkIjoiTWlBcGkifQ.O2qwU4qgGueu7ahT9jLyStr0XYGXZF06QwXbSO4Fkqc",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"alonso@gmail.com\",\n    \"password\": \"Password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}usuarios/login",
+							"host": [
+								"{{base_url}}usuarios"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Perfil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}usuarios/perfil",
+							"host": [
+								"{{base_url}}usuarios"
+							],
+							"path": [
+								"perfil"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Usuario con datos erroneos para validaciones",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJqdGkiOiI5M2QzZWYzZS00MjNjLTQ2NWYtYjJiMy1mYjgzNGJiNDQzNzQiLCJleHAiOjE3NjM1MDg0NTgsImlzcyI6Ik1pQXBpIiwiYXVkIjoiTWlBcGkifQ.O2qwU4qgGueu7ahT9jLyStr0XYGXZF06QwXbSO4Fkqc",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan123\",  \n  \"apellido\": \"Pérez\",\n  \"email\": \"correo-invalido\",  \n  \"password\": \"abc\",  \n  \"rol\": \"admin\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}usuarios/registro",
+							"host": [
+								"{{base_url}}usuarios"
+							],
+							"path": [
+								"registro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Habitaciones",
+			"item": [
+				{
+					"name": "Crear Habitacion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "NumeroHabitacion",
+									"value": "110",
+									"type": "text"
+								},
+								{
+									"key": "TipoHabitacionId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "Piso",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "PrecioBase",
+									"value": "549.59",
+									"type": "text"
+								},
+								{
+									"key": "Capacidad",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "Descripcion",
+									"value": "Habitación doble",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "Fotos",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "Fotos",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}habitaciones",
+							"host": [
+								"{{base_url}}habitaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Habitacion",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "NumeroHabitacion",
+									"value": "106",
+									"type": "text"
+								},
+								{
+									"key": "TipoHabitacionId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "Piso",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "PrecioBase",
+									"value": "520",
+									"type": "text"
+								},
+								{
+									"key": "Capacidad",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "ReemplazarFotos",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "Descripcion",
+									"value": "Habitación doble",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "ServiciosIds[]",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "NuevasFotos",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}habitaciones/1003",
+							"host": [
+								"{{base_url}}habitaciones"
+							],
+							"path": [
+								"1003"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener informacion de una sola habitacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}habitaciones/1",
+							"host": [
+								"{{base_url}}habitaciones"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener los tipos de Habitacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}TiposHabitacion",
+							"host": [
+								"{{base_url}}TiposHabitacion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Huesped",
+			"item": [
+				{
+					"name": "Registrar Huesped",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Luis\",\n  \"apellido\": \"Martínez\",\n  \"email\": \"luis@test.com\",\n  \"telefono\": \"9991112233\",\n  \"numeroDocumento\": \"A12345\",\n  \"tipoDocumento\": \"Pasaporte\",\n  \"nacionalidad\": \"Mexicana\",\n  \"direccion\": \"Calle 123\",\n  \"fechaNacimiento\": \"1998-06-20\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}Huesped",
+							"host": [
+								"{{base_url}}Huesped"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Huesped",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}Huesped",
+							"host": [
+								"{{base_url}}Huesped"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Precios por temporada",
+			"item": [
+				{
+					"name": "Crear nueva temporada de precio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Verano 2026\",\n  \"descripcion\": \"Temporada de verano con precios especiales\",\n  \"fechaInicio\": \"2025-07-01T00:00:00\",\n  \"fechaFin\": \"2025-07-31T23:59:59\",\n  \"factorMultiplicador\": 1.40,\n  \"activo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}TemporadaPrecio",
+							"host": [
+								"{{base_url}}TemporadaPrecio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Precios Activos por temporada",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}TemporadaPrecio/activos",
+							"host": [
+								"{{base_url}}TemporadaPrecio"
+							],
+							"path": [
+								"activos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Precios Activos por temporada",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}TemporadaPrecio/1",
+							"host": [
+								"{{base_url}}TemporadaPrecio"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar precio temporada",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJPc2NhciIsImVtYWlsIjoib3NjYXJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwianRpIjoiOGIwYzY5M2EtMmM1My00MDBhLWI2NDEtYzgxYTdjODRmYjgyIiwibmJmIjoxNzY0MjA4MjUzLCJleHAiOjE3NjQyMTU0NTMsImlhdCI6MTc2NDIwODI1MywiaXNzIjoiUHJvamVjdEhvdGVsIiwiYXVkIjoiUHJvamVjdEhvdGVsIn0.gHA1wM3r9lGu3uqIIwYXGZ6g9LLQnOfic3nCFG32Bsc",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Test Actualizar\",\n  \"descripcion\": \"Prueba\",\n  \"fechaInicio\": \"2024-12-20T00:00:00\",\n  \"fechaFin\": \"2025-01-06T23:59:59\",\n  \"factorMultiplicador\": 1.50,\n  \"activo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}TemporadaPrecio/1",
+							"host": [
+								"{{base_url}}TemporadaPrecio"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Precios de una Temporada Específica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}TemporadaHabitacionPrecio",
+							"host": [
+								"{{base_url}}TemporadaHabitacionPrecio"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Precio por habitacion y temporada",
+			"item": [
+				{
+					"name": "Calcular precio habitacion",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJPc2NhciIsImVtYWlsIjoib3NjYXIxMkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJqdGkiOiI0YWVjMzcxNy00YjkzLTRmMzQtYWNiYy0xODg5MDFkYWI1YTMiLCJuYmYiOjE3NjM3ODkyMTEsImV4cCI6MTc2Mzc5NjQxMSwiaWF0IjoxNzYzNzg5MjExLCJpc3MiOiJQcm9qZWN0SG90ZWwiLCJhdWQiOiJQcm9qZWN0SG90ZWwifQ.6E1_N_6uddSRTHrbAIIeae44XkEcW71MjdvUojxtkWI",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}TemporadaHabitacionPrecio/calcular/habitacion/1002?fecha=2025-10-25",
+							"host": [
+								"{{base_url}}TemporadaHabitacionPrecio"
+							],
+							"path": [
+								"calcular",
+								"habitacion",
+								"1002"
+							],
+							"query": [
+								{
+									"key": "fecha",
+									"value": "2025-10-25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear precio por habitacion en temporada",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"temporadaId\": 1002,\n  \"habitacionId\": 1003,\n  \"precioOverride\": 2000.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}TemporadaHabitacionPrecio",
+							"host": [
+								"{{base_url}}TemporadaHabitacionPrecio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Precios de una Habitación Específica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}TemporadaHabitacionPrecio/habitacion/1",
+							"host": [
+								"{{base_url}}TemporadaHabitacionPrecio"
+							],
+							"path": [
+								"habitacion",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservas",
+			"item": [
+				{
+					"name": "Crear Reserva",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"habitacionId\": 3, \n  \"huespedId\": 1,\n  \"fechaEntrada\": \"2025-12-20T14:00:00\",\n  \"fechaSalida\": \"2025-12-23T11:00:00\",\n  \"numeroHuespedes\": 2,\n  \"observaciones\": \"Solicita una habitación silenciosa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}reservas",
+							"host": [
+								"{{base_url}}reservas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirmar Reservas",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}reservas/6004/confirmar",
+							"host": [
+								"{{base_url}}reservas"
+							],
+							"path": [
+								"6004",
+								"confirmar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

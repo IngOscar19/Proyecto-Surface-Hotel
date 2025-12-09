@@ -2,129 +2,196 @@
 
 ## 📖 Descripción del Proyecto
 
-Este proyecto consiste en el desarrollo de una **API RESTful** robusta diseñada para la gestión integral de operaciones hoteleras. Su propósito principal es servir como el núcleo lógico que conecta la interfaz de usuario (Frontend) con la base de datos, asegurando la integridad de los datos y aplicando las reglas de negocio del hotel.
+Este proyecto es una **API RESTful** desarrollada con **.NET 8** que permite la gestión integral de un sistema hotelero. Su propósito es servir como el núcleo de negocio que conecta el frontend con la base de datos, permitiendo una administración segura y eficiente de huéspedes, habitaciones, reservas y temporadas de precios.
 
-El sistema permite automatizar procesos clave como el registro de huéspedes, la administración del inventario de habitaciones y el ciclo de vida completo de una reserva, desde la solicitud inicial hasta el check-out.
+La API aplica reglas de negocio para garantizar la integridad de los datos, validaciones consistentes mediante **FluentValidation** y un sistema de autenticación moderna basado en **JWT**.
 
-### Funcionalidades Principales
+### Funcionalidades principales
 
-  * **Gestión de Identidad:** Sistema seguro de registro e inicio de sesión utilizando estándares modernos de autenticación.
-  * **Inventario de Habitaciones:** Control total sobre el estado de las habitaciones (disponible, ocupada, mantenimiento), permitiendo actualizaciones en tiempo real.
-  * **Motor de Reservas:** Lógica avanzada para evitar solapamiento de fechas, cálculo automático de costos y transición de estados de reserva.
-  * **Precios Dinámicos:** Capacidad para gestionar diferentes tipos de habitaciones con precios base configurables.
+* Autenticación y autorización de usuarios mediante tokens JWT.
+* Gestión de habitaciones (registro, edición, consulta).
+* Registro y administración de huéspedes.
+* Creación y control de reservas.
+* Administración de temporadas con precios dinámicos.
+* Carga de imágenes para habitaciones.
 
-### 🔌 Endpoints Implementados y su Relevancia
+---
 
-El sistema expone los siguientes recursos clave para la operación del hotel:
+## 🔌 Endpoints Implementados y su Relevancia
 
-1.  **`/api/usuarios` (Autenticación y Perfil)**
+### `/api/usuarios`
 
-      * **Relevancia:** Es la puerta de entrada al sistema. Garantiza que solo usuarios registrados (Clientes) y personal autorizado (Admin/Empleados) puedan acceder a las funciones protegidas mediante **JWT**.
-      * **Endpoints:** Registro, Login, Perfil de Usuario.
+Permite el registro e inicio de sesión de usuarios, protegiendo el acceso mediante JWT.
 
-2.  **`/api/habitaciones` (Inventario)**
+### `/api/habitaciones`
 
-      * **Relevancia:** Permite a los administradores mantener el catálogo de habitaciones actualizado y a los clientes consultar la disponibilidad. Es vital para evitar sobreventas.
-      * **Endpoints:** Listar (público), Crear, Editar y Ver Detalle.
+Administra el inventario de habitaciones, asegurando disponibilidad en tiempo real.
 
-3.  **`/api/reservas` (Operaciones)**
+### `/api/Huesped`
 
-      * **Relevancia:** Es el núcleo del negocio. Maneja la lógica compleja de fechas y estados. Incluye endpoints críticos para el personal, como `confirmar` (Check-in), que cambia automáticamente el estado de la habitación a "Ocupada".
-      * **Endpoints:** Crear Reserva, Historial, Confirmar Reserva, Cancelar Reserva.
+Gestiona el registro de huéspedes, quienes son los responsables de las habitaciones.
 
------
+### `/api/reservas`
+
+Controla el ciclo completo de vida de las reservas.
+
+### `/api/TemporadaPrecio`
+
+Permite crear temporadas de precios especiales.
+
+### `/api/TemporadaHabitacionPrecio`
+
+Administra el precio de habitaciones por temporada.
+
+---
+
+## 📌 Endpoints Importantes
+
+### Crear una nueva habitación
+
+* **Ruta:** `http://localhost:5053/api/habitaciones`
+* **Método:** `POST`
+* **Body:** `form-data`
+* **Headers:** `Authorization: Bearer {TOKEN}`
+
+### Registrar huésped
+
+* **Ruta:** `http://localhost:5053/api/Huesped`
+* **Método:** `POST`
+
+### Crear reserva
+
+* **Ruta:** `http://localhost:5053/api/reservas`
+* **Método:** `POST`
+
+### Registrar temporada de precios
+
+* **Ruta:** `http://localhost:5053/api/TemporadaPrecio`
+* **Método:** `POST`
+
+### Registrar precio de habitación por temporada
+
+* **Ruta:** `http://localhost:5053/api/TemporadaHabitacionPrecio`
+* **Método:** `POST`
+
+---
 
 ## 🚀 Instrucciones para Ejecutar el Proyecto
 
-Sigue estos pasos para desplegar el backend en tu entorno local.
+### Requerimientos del Sistema
 
-### 1\. Requerimientos del Sistema
+* .NET SDK 8.0
+* Docker Desktop
+* SQL Server 2022 (mediante Docker)
+* Visual Studio 2022 o VS Code
+* Postman
 
-  * **Lenguaje:** C\# / .NET 8 SDK.
-  * **Base de Datos:** SQL Server 2022 (Ejecutándose en Docker).
-  * **Herramientas:** Visual Studio 2022 / VS Code, Docker Desktop, Postman.
+---
 
-### 2\. Configuración Inicial (Base de Datos y Variables)
+### Instalación del Proyecto
 
-Este proyecto utiliza **Docker** para la base de datos. No necesitas instalar SQL Server localmente.
+Clonar el repositorio:
 
-1.  **Levantar el contenedor de Base de Datos:**
-    Abre tu terminal y ejecuta el siguiente comando:
+```bash
+git clone https://github.com/tu-usuario/tu-repositorio.git
+cd Hotel.API
+```
 
-    ```bash
-    docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Admin12345" -p 1433:1433 --name sqlhotel -d mcr.microsoft.com/mssql/server:2022-latest
-    ```
-
-2.  **Configurar Variables de Conexión (`appsettings.json`):**
-    Asegúrate de que el archivo `appsettings.json` en la raíz del proyecto tenga la cadena de conexión apuntando a tu contenedor Docker y una clave segura para JWT:
-
-    ```json
-    {
-        "ConnectionStrings": {
-        "DefaultConnection": "Server=localhost,1433;Database=HotelDB;User=sa;Password=Admin12345;TrustServerCertificate=True"
-        },
-    "   Jwt": {
-            "Key": "cualquiera",
-            "Issuer": "ProjectHotel",
-            "Audience": "ProjectHotel"
-        }
-    }
-    ```
-
-### 3\. Instalación de Dependencias
-
-Abre una terminal en la carpeta raíz del proyecto (`/Hotel.API`) y ejecuta:
+Instalar dependencias:
 
 ```bash
 dotnet restore
 ```
 
-*Esto descargará paquetes necesarios como EntityFrameworkCore, FluentValidation y BCrypt.*
+---
 
-### 4\. Crear la Base de Datos (Migraciones)
+### Configuración Inicial
 
-Para crear las tablas en tu contenedor de SQL Server automáticamente, ejecuta:
+Levantar SQL Server en Docker:
 
 ```bash
+docker pull mcr.microsoft.com/mssql/server:2022-latest
+
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Admin12345" -p 1433:1433 --name sqlhotel -d mcr.microsoft.com/mssql/server:2022-latest
+```
+
+Crear la base de datos manualmente:
+
+```
+HotelDB
+```
+
+Configurar `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=HotelDB;User=sa;Password=Admin12345;TrustServerCertificate=True"
+  },
+  "Jwt": {
+    "Key": "cualquiera",
+    "Issuer": "ProjectHotel",
+    "Audience": "ProjectHotel"
+  }
+}
+```
+
+---
+
+### Crear Base de Datos (Migraciones)
+
+```bash
+dotnet tool install --global dotnet-ef
 dotnet ef database update
 ```
 
-### 5\. Comandos para Iniciar el Proyecto
+---
 
-Para levantar el servidor de desarrollo:
+### Comandos para Iniciar el Proyecto
 
 ```bash
 dotnet run
 ```
 
-La API estará disponible en: `http://localhost:5053` (o el puerto que indique tu consola).
+La API se ejecutará en:
 
------
+```
+http://localhost:5053
+```
+---
 
 ## 📮 Colección de Postman
 
-Para facilitar las pruebas y la evaluación de los endpoints, se incluye una colección completa de Postman.
+La colección de Postman incluye todos los endpoints implementados y ejemplos de requests completos.
 
-  * **Ubicación del archivo:** `docs/Hotel_API_Collection.json` (o en la raíz del repositorio).
-  * **Contenido:**
-      * Ejemplos de **Requests** completos (Body, Headers).
-      * Ejemplos de **Responses** exitosos y de error.
-      * Organización por carpetas (Auth, Habitaciones, Reservas).
-      * Configuración de variables de entorno (BaseURL, Token).
+Ubicación del archivo:
 
-**Pasos para importar:**
+```
+docs/Proyecto_Surface_Hotel.postman_collection.json
+```
 
-1.  Abre Postman.
-2.  Haz clic en "Import".
-3.  Arrastra el archivo `.json` incluido en este repositorio.
+Pasos para usarla:
 
------
+1. Abrir Postman.
+2. Seleccionar **Import**.
+3. Cargar el archivo `.json`.
 
-### ⚠️ Consideraciones Especiales
+---
 
-  * **Primer Usuario (Admin):** Al iniciar la base de datos está vacía. Se recomienda registrar un usuario y cambiar su rol manualmente en la base de datos o usar el endpoint de registro (el cual crea usuarios con rol "cliente" por defecto).
-  * **Validaciones:** Las contraseñas deben ser fuertes (Mayúscula, minúscula, número y símbolo) debido a las reglas de seguridad implementadas.
-  * **Formato de Fechas:** Las fechas deben enviarse en formato ISO 8601 (`YYYY-MM-DD`).
+## 🎥 Video Demostrativo del Proyecto
 
------
+Enlace al video de demostración en YouTube:
+
+```
+PENDIENTE - Agregar enlace aquí
+```
+
+---
+
+## ⚠️ Consideraciones Especiales
+
+* El primer usuario registrado debe configurarse como **Admin** manualmente en la base de datos.
+* Las contraseñas deben cumplir con reglas de seguridad fuertes.
+* Las fechas deben enviarse en formato ISO 8601: `YYYY-MM-DD`.
+
 

@@ -46,13 +46,13 @@ namespace Hotel.Services
                 using var scope = _serviceProvider.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<HotelDbContext>();
 
-                var ahora = DateTime.UtcNow;
-                var hoy = ahora.Date;
+                var ahora = DateTime.UtcNow; 
+                var hoy = ahora.Date; 
 
                 _logger.LogInformation("Verificando estados de habitaciones");
 
                 
-                // Reservas confirmadas donde hoy >= fecha entrada Y hoy < fecha salida
+                
                 var reservasActivas = await context.Reservas
                     .Include(r => r.Habitacion)
                     .Where(r => r.Estado == "confirmada" &&
@@ -67,12 +67,11 @@ namespace Hotel.Services
                     reserva.Habitacion.Estado = "ocupada";
                 }
 
-               
-                // Reservas donde hoy >= fecha salida (checkout)
+
                 var reservasFinalizadas = await context.Reservas
                     .Include(r => r.Habitacion)
                     .Where(r => (r.Estado == "confirmada" || r.Estado == "completada") &&
-                               r.FechaSalida.Date <= hoy &&
+                               r.FechaSalida <= ahora && 
                                r.Habitacion.Estado == "ocupada")
                     .ToListAsync(stoppingToken);
 
@@ -81,7 +80,7 @@ namespace Hotel.Services
                     _logger.LogInformation($"Habitación {reserva.Habitacion.NumeroHabitacion} → LIMPIEZA (Checkout de Reserva #{reserva.Id})");
                     reserva.Habitacion.Estado = "limpieza";
                     
-                    // Marcar reserva como completada
+                    
                     if (reserva.Estado != "completada")
                     {
                         reserva.Estado = "completada";
@@ -90,14 +89,14 @@ namespace Hotel.Services
                 }
 
                 
-                // (Esto lo puedes hacer manualmente o después de X horas)
+                
                 var habitacionesLimpieza = await context.Habitaciones
                     .Where(h => h.Estado == "limpieza")
                     .ToListAsync(stoppingToken);
 
                 foreach (var habitacion in habitacionesLimpieza)
                 {
-                    // Verificar si tiene reserva próxima (en las próximas 24 horas)
+                    
                     var tieneReservaProxima = await context.Reservas
                         .AnyAsync(r => r.HabitacionId == habitacion.Id &&
                                       r.Estado == "confirmada" &&
@@ -107,7 +106,7 @@ namespace Hotel.Services
 
                     if (!tieneReservaProxima)
                     {
-                        // Si no hay reserva próxima y ya pasaron 2 horas desde última actualización
+                        
                         var horasDesdeActualizacion = (ahora - habitacion.ActualizadoEn).TotalHours;
                         
                         if (horasDesdeActualizacion >= 2)
@@ -120,7 +119,6 @@ namespace Hotel.Services
                 }
 
                 
-                // Reservas pendientes donde la fecha de entrada ya pasó hace más de 24 horas
                 var reservasPendientesVencidas = await context.Reservas
                     .Where(r => r.Estado == "pendiente" &&
                                r.FechaEntrada.Date < hoy.AddDays(-1))
@@ -135,7 +133,7 @@ namespace Hotel.Services
                     reserva.ActualizadoEn = ahora;
                 }
 
-                // Guardar todos los cambios
+                
                 var cambios = await context.SaveChangesAsync(stoppingToken);
 
                 if (cambios > 0)
