@@ -38,11 +38,11 @@ namespace Hotel.Services
                 await archivo.CopyToAsync(stream);
             }
 
-            // Retornar ruta relativa para la URL
+           
             return $"/uploads/habitaciones/{nombreArchivo}";
         }
 
-        // Método auxiliar para eliminar archivo
+        
         private void EliminarArchivo(string url)
         {
             try
@@ -232,15 +232,15 @@ namespace Hotel.Services
                 }
             }
 
-            // ✅ CORRECCIÓN: Manejar nuevas fotos según la opción ReemplazarFotos
+            
             if (nuevasFotos != null && nuevasFotos.Any())
             {
-                Console.WriteLine($"📸 Procesando {nuevasFotos.Count} nuevas fotos");
+                Console.WriteLine($"Procesando {nuevasFotos.Count} nuevas fotos");
                 
-                // ✅ Solo eliminar fotos existentes si ReemplazarFotos == true
+                
                 if (request.ReemplazarFotos == true)
                 {
-                    Console.WriteLine("🔄 ReemplazarFotos = TRUE → Eliminando fotos existentes");
+                    Console.WriteLine("ReemplazarFotos = TRUE → Eliminando fotos existentes");
                     
                     // Eliminar archivos físicos y registros de la BD
                     foreach (var foto in habitacion.Fotos.ToList())
@@ -252,13 +252,13 @@ namespace Hotel.Services
                     
                     await _context.SaveChangesAsync();
                     
-                    // Recargar la colección de fotos
+                    
                     await _context.Entry(habitacion).Collection(h => h.Fotos).LoadAsync();
                     Console.WriteLine($"   Fotos después de eliminar: {habitacion.Fotos.Count}");
                 }
                 else
                 {
-                    Console.WriteLine("➕ ReemplazarFotos = FALSE → Manteniendo fotos existentes y agregando nuevas");
+                    Console.WriteLine("ReemplazarFotos = FALSE → Manteniendo fotos existentes y agregando nuevas");
                 }
 
                 // ✅ Agregar nuevas fotos
@@ -285,15 +285,15 @@ namespace Hotel.Services
                 }
                 
                 await _context.SaveChangesAsync();
-                Console.WriteLine("✅ Fotos guardadas en la base de datos");
+                Console.WriteLine("Fotos guardadas en la base de datos");
                 
                 // Recargar fotos después de guardar
                 await _context.Entry(habitacion).Collection(h => h.Fotos).LoadAsync();
-                Console.WriteLine($"✅ Total de fotos después de actualizar: {habitacion.Fotos.Count}");
+                Console.WriteLine($"Total de fotos después de actualizar: {habitacion.Fotos.Count}");
             }
             else
             {
-                Console.WriteLine("ℹ️ No se recibieron nuevas fotos, manteniendo las existentes");
+                Console.WriteLine("ℹNo se recibieron nuevas fotos, manteniendo las existentes");
             }
 
             await _context.SaveChangesAsync();
@@ -427,7 +427,7 @@ namespace Hotel.Services
             };
         }
 
-        // Implementar métodos restantes...
+        
         public Task<HabitacionDetalleResponse?> ObtenerPorNumeroAsync(string numeroHabitacion)
         {
             throw new NotImplementedException();

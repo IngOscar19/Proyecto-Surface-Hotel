@@ -183,14 +183,13 @@ Pasos para usarla:
 Enlace al video de demostración en YouTube:
 
 ```
-PENDIENTE - Agregar enlace aquí
+https://youtu.be/SF92FcJxTXo
 ```
 
 ---
 
 ## ⚠️ Consideraciones Especiales
 
-* El primer usuario registrado debe configurarse como **Admin** manualmente en la base de datos.
 * Las contraseñas deben cumplir con reglas de seguridad fuertes.
 * Las fechas deben enviarse en formato ISO 8601: `YYYY-MM-DD`.
 
