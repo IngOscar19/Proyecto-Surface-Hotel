@@ -484,4 +484,8 @@ $RECYCLE.BIN/
 *.swp
 
 
-wwwroot/uploads/
+# Ignorar todo el contenido de uploads...
+wwwroot/uploads/*
+
+
+!wwwroot/uploads/.gitkeep
